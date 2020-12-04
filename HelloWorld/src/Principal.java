@@ -1,20 +1,20 @@
 import java.util.Scanner;
 
 public class Principal {
-    public static int calculaMDC(int num1, int num2){
-        if (num1 < num2){
+    public static int calculaMDC(int x, int num2){
+        if (x < num2){
             int aux = num2;
-            num2 = num1;
-            num1 = aux;
+            num2 = x;
+            x = aux;
         }
-        int res = num1 % num2;
+        int res = x % num2;
         if(res == 0){
             return num2;
         }
         while (true){
-                num1 = num2;
+                x = num2;
                 num2 = res;
-                int aux2 = num1 % num2;
+                int aux2 = x % num2;
                 if(aux2 ==
                         0){
                     return res;
