@@ -1,108 +1,110 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-
 public class Principal {
 
-    public static void imprimirArray(int[] primos){
-        for(int ind = 0; ind < primos.length; ind++){
-            System.out.printf("primos[%d] = %d\n", ind, primos[ind]);
+    public static void imprimirArrayDeInteiros(int[] primos){
+        for(int i = 0; i < primos.length; i++){
+            System.out.printf("primos[%d] = %d\n", i, primos[i]);
         }
     }
 
-    public static void imprimirArray(boolean[] numerosCompostos){
-        for (int ind = 0; ind < numerosCompostos.length; ind++){
-            System.out.printf("numerosCompostos[%d] = %s\n", ind, numerosCompostos[ind]);
-        }
-        numerosCompostos[0] = false;
-    }
-
-    public static int[] obterPrimosViaCrivo(int limite){
-        boolean[] numerosCompostos = new boolean[limite + 1];
-        numerosCompostos[0] = true;  // true se é composto
-        numerosCompostos[1] = true;
-        int passo = 2;
-        while(passo <= limite) {
-            for (int numeroASerRiscado = passo * 2; numeroASerRiscado <= limite; numeroASerRiscado += passo) {
-                numerosCompostos[numeroASerRiscado] = true;
-            }
-            int novoPasso = 0;
-            for(int i = passo + 1; i <= limite; i++){
-                if(!numerosCompostos[i]){
-                    novoPasso = i;
-                    break;
-                }
-            }
-            if(novoPasso == 0) break;
-            passo = novoPasso;
-        }
-        int quantPrimos = 0;
-        for (int i = 2; i <= limite; i++){
-            if(!numerosCompostos[i]){
-                quantPrimos++;
-            }
-        }
-//        int[] primos = new int[quantPrimos];
-//        int indice = 0;
-//        for (int candidatoAPrimo = 2; candidatoAPrimo <= limite; candidatoAPrimo++){
-//            if(ehPrimo(candidatoAPrimo)){
-//                primos[indice++] = candidatoAPrimo;
-//            }
-//        }
-
-        int[] primos = new int[5];
-        int indice = 0;
-        for (int candidatoAPrimo = 2; candidatoAPrimo <= limite; candidatoAPrimo++){
-
-            if(ehPrimo(candidatoAPrimo)){
-                if(indice == primos.length){
-                    int[] novoPrimos = new int[primos.length*2];
-                    for(int i = 0; i < indice; i++){
-                        novoPrimos[i] = primos[i];
-                    }
-                    primos = novoPrimos;
-                }
-                primos[indice++] = candidatoAPrimo;
-            }
-        }
-//        imprimirArray(numerosCompostos);
-//        System.out.printf("Após modificação --> numerosCompostos[0]: %s\n", numerosCompostos[0]);
-        return primos;
-    }
-
-    public static boolean ehPrimo(int num){
-        if(num < 2){
+    public static boolean ehPrimo(int numero){
+        if(numero < 2){
             return false;
         }
-        if (num == 2) return true;
-        if(num % 2 == 0) return false;
-        int raiz = (int)Math.sqrt(num);
-        for(int i = 3; i <= raiz; i += 2){
-            if(num % i == 0){
+        if(numero == 2){
+            return true;
+        }
+        if(numero % 2 == 0){
+            return false;
+        }
+        int raiz = (int)Math.sqrt(numero);
+        for(int i = 3; i <= raiz; i+= 2){
+            if(numero % i == 0){
                 return false;
             }
         }
         return true;
     }
 
+    public static void imprimirArrayBooleano(boolean [] array){
+        for(int i = 0; i < array.length; i++){
+            System.out.printf("numerosCompostos[%d] = %s\n", i, array[i]);
+        }
+        //array[1] = false;
+    }
+    public static int[] obterPrimosViaCrivo(int limite){
+        boolean[] numerosCompostos = new boolean[limite + 1];
+        numerosCompostos[1] = true;
+        numerosCompostos[0] = true;
+
+        int passo = 2;
+        while(passo <= limite){
+            for(int numeroASerRiscado = passo*2 ; numeroASerRiscado <= limite; numeroASerRiscado+=passo){
+                numerosCompostos[numeroASerRiscado] = true;
+            }
+            int novoPasso = 0;
+            for(int ind = passo + 1; ind <= limite; ind++){
+                if(!numerosCompostos[ind]){
+                    novoPasso = ind;
+                    break;
+                }
+            }
+            if(novoPasso == 0){
+                break;
+            }
+            passo = novoPasso;
+        }
+
+        int quantidadeDePrimos = 0;
+        int[] arrayComOsPrimosComFolga = new int[5];
+
+        for(int candidatoAPrimo = 2; candidatoAPrimo <= limite; candidatoAPrimo++){
+            if(!numerosCompostos[candidatoAPrimo]){
+
+                if(quantidadeDePrimos >= arrayComOsPrimosComFolga.length){
+
+                    int[] novoArray = new int[2* arrayComOsPrimosComFolga.length];
+                    for(int i = 0; i < arrayComOsPrimosComFolga.length; i++){
+                        novoArray[i] = arrayComOsPrimosComFolga[i];
+                    }
+                    arrayComOsPrimosComFolga = novoArray;
+                }
+
+                arrayComOsPrimosComFolga[quantidadeDePrimos++] = candidatoAPrimo;
+            }
+        }
+        //deixando o array justo:
+//        int[] result = new int[quantidadeDePrimos];
+//        for(int i = 0; i < quantidadeDePrimos; i++){
+//            result[i]= arrayComOsPrimosComFolga[i];
+//        }
+
+        //imprimirArrayBooleano(numerosCompostos);
+        //System.out.println("pos atualização -->> numerosCompostos[1] = " + numerosCompostos[1]);
+
+        return arrayComOsPrimosComFolga;
+    }
+
     public static int contarPrimos(int limite){
-        return obterPrimosViaCrivo(limite).length;
+        int contPrimos = 0;
+        int [] array = obterPrimosViaCrivo(limite);
+        for(int i = 0; i < array.length; i++){
+            if(array[i] != 0){
+                contPrimos++;
+            }
+        }
+        return contPrimos;
     }
 
     public static ArrayList<Integer> obterPrimos(int limite){
-        //int primosComFolga[] = obterPrimosViaCrivo(limite);
-        ArrayList<Integer> primos = new ArrayList<>();
-//        int quantPrimos = 0;
-//        for(int i = 0; i < primosComFolga.length; i++){
-//            if(primosComFolga[i] != 0){
-//                quantPrimos++;
-//            }
-//        }
-//        int[] primos = new int[quantPrimos];
-//        int indice = 0;
+        //int dimensao = contarPrimos(limite);
+        //int[] arrayComOsPrimos = new int[dimensao];
+        ArrayList<Integer> primos = new ArrayList<Integer>();
+
         int ind = 0;
         for(int candidatoAPrimo = 2; candidatoAPrimo <= limite; candidatoAPrimo++){
             if(ehPrimo(candidatoAPrimo)){
-                //primos[ind++] = candidatoAPrimo;
                 primos.add(candidatoAPrimo);
             }
         }
@@ -112,39 +114,28 @@ public class Principal {
     public static void main(String[] args){
 
         Scanner scanner = new Scanner(System.in);
-        while(true) {
-
-            System.out.print("Digite um inteiro positivo: ");
-
+        while(true){
+            System.out.println("Digite um número inteiro positivo: ");
             int x = scanner.nextInt();
-            if(x < 0) break;
+            if(x < 0){
+                break;
+            }
             long inicio = System.currentTimeMillis();
             ArrayList<Integer> primos = obterPrimos(x);
             long termino = System.currentTimeMillis();
             float duracao = (termino - inicio)/1000f;
-            System.out.printf("Via força bruta\nQuantidade de primos em [1, %d] = %d (duracao: %.3f)\n", x, primos.stream().count(), duracao);
-
-            //imprimirArray(primos);
+            System.out.printf("primos no intervalo [1, %d] = %d  (duração %.3f)\n", x, primos.size(), duracao);
             System.out.println(primos);
 
-            int[] primos2;
+
             inicio = System.currentTimeMillis();
-            primos2 = obterPrimosViaCrivo(x);
+            int[] primo = obterPrimosViaCrivo(x);
             termino = System.currentTimeMillis();
             duracao = (termino - inicio)/1000f;
-            System.out.printf("Via Crivo\nQuantidade de primos em [1, %d]: %d (duraçao: %.3f)\n", x, primos2.length, duracao);
-            imprimirArray(primos2);
+            System.out.printf("primos no intervalo [1, %d] = %d  (duração %.3f)\n", x, primo.length, duracao);
+            imprimirArrayDeInteiros(primo);
         }
+
     }
+
 }
-
-
-
-
-
-
-
-
-
-
-

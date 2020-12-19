@@ -6,153 +6,134 @@ public class ContaCorrenteTest {
 
     private final float ERRO_ACEITAVEL_NOS_FLOATS = 0.000001f;
 
-
     @Test
     public void testarDeposito(){
-        Pessoa pessoa1 = new Pessoa("pessoa1", 12345678);
-        Agencia agenciaDaPessoa1 = new Agencia();
-        ContaCorrente contaDaPessoa1 = new ContaCorrente(111, pessoa1, agenciaDaPessoa1);
 
-        // sanity check
-        assertEquals(10, contaDaPessoa1.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        Pessoa primeiraPessoa = new Pessoa("primeiraPessoa", 1111);
+        Agencia primeiraAgencia = new Agencia();
+        ContaCorrente conta = new ContaCorrente(1111, primeiraPessoa, primeiraAgencia);
 
-        contaDaPessoa1.depositar(1000);
+        //sanity check
+        assertEquals(10, conta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
-        assertEquals(1010, contaDaPessoa1.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        conta.depositar(1000);
+        assertEquals(1010f, conta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
-        contaDaPessoa1.depositar(500);
+        conta.depositar(500);
+        assertEquals(1510f, conta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
-        assertEquals(1510, contaDaPessoa1.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-
-        contaDaPessoa1.depositar(-1);
-
-        assertEquals(1510, contaDaPessoa1.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        conta.depositar(-100);
+        assertEquals(1510f, conta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
     }
 
     @Test
-    public void testarSaqueComNumeroPositivo(){
-        Pessoa pessoa2 = new Pessoa("pessoa2", 12345678);
-        Agencia agenciaDaPessoa2 = new Agencia();
-        ContaCorrente contaDaPessoa2 = new ContaCorrente(222, pessoa2, agenciaDaPessoa2);
+    public void testarSaqueNegativo(){
 
-        // sanity check
-        assertEquals(10f, contaDaPessoa2.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        Pessoa segundaPessoa = new Pessoa("segundaPessoa", 2222);
+        Agencia segundaAgencia = new Agencia();
+        ContaCorrente conta = new ContaCorrente(9999, segundaPessoa, segundaAgencia);
 
-        contaDaPessoa2.sacar(9);
+        //sanity check
+        assertEquals(10f, conta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
-        assertEquals(1f, contaDaPessoa2.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-    }
+        conta.sacar(-100);
+        assertEquals(10f, conta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
-    @Test
-    public void testarSaqueComNumeroNegativo(){
-        Pessoa pessoa3 = new Pessoa("pessoa3", 12345678);
-        Agencia agenciaDaPessoa3 = new Agencia();
-        ContaCorrente contaDaPessoa3 = new ContaCorrente(333, pessoa3, agenciaDaPessoa3);
-
-        // sanity check
-        assertEquals(10f, contaDaPessoa3.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-
-        contaDaPessoa3.sacar(-1);
-
-        assertEquals(10f, contaDaPessoa3.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-    }
-
-    @Test
-    public void testarTranferenciaComFundosNaContaDeOrigem(){
-        Agencia agencia = new Agencia();
-
-        Pessoa pessoa4 = new Pessoa("pessoa4", 44444444);
-        Pessoa pessoa5 = new Pessoa("pessoa5", 55555555);
-
-        ContaCorrente contaDaPessoa4 = new ContaCorrente(444, pessoa4, agencia);
-        ContaCorrente contaDaPessoa5 = new ContaCorrente(555, pessoa5, agencia);
-
-        // sanity check: as contas já começam com saldo 10 (regra de negócio)
-        assertEquals(10f, contaDaPessoa4.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-        assertEquals(10f, contaDaPessoa5.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-
-        contaDaPessoa4.transferir(7, contaDaPessoa5);
-
-        assertEquals(3f, contaDaPessoa4.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-        assertEquals(17f, contaDaPessoa5.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-
-        contaDaPessoa5.transferir(17, contaDaPessoa4);
-
-        assertEquals(20f, contaDaPessoa4.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-        assertEquals(0f, contaDaPessoa5.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        conta.sacar(-5);
+        assertEquals(10f, conta.getSaldoEmReais(),ERRO_ACEITAVEL_NOS_FLOATS);
 
     }
 
     @Test
-    public void testarTranferenciaSemFundosNaContaDeOrigem(){
-        Agencia agencia = new Agencia();
+    public void testarSaquePositivo(){
 
-        Pessoa pessoa6 = new Pessoa("pessoa6", 66666666);
-        Pessoa pessoa7 = new Pessoa("pessoa7", 77777777);
+        Pessoa terceiraPessoa = new Pessoa("terceiraPessoa", 3333);
+        Agencia terceiraAgencia = new Agencia();
+        ContaCorrente conta = new ContaCorrente(8888, terceiraPessoa, terceiraAgencia);
 
-        ContaCorrente contaDaPessoa6 = new ContaCorrente(666, pessoa6, agencia);
-        ContaCorrente contaDaPessoa7 = new ContaCorrente(777, pessoa7, agencia);
+        //sanity check
+        assertEquals(10f, conta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
-        // sanity check: as contas já começam com saldo 10 (regra de negócio)
-        assertEquals(10f, contaDaPessoa6.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-        assertEquals(10f, contaDaPessoa7.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        conta.sacar(2);
+        assertEquals(8f, conta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
-        contaDaPessoa6.transferir(200, contaDaPessoa7);
+        conta.sacar(5);
+        assertEquals(3f, conta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
-        assertEquals(10f, contaDaPessoa6.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-        assertEquals(10f, contaDaPessoa7.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        conta.sacar(3);
+        assertEquals(0f, conta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
-        contaDaPessoa7.transferir(11f, contaDaPessoa6);
-
-        assertEquals(10f, contaDaPessoa6.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-        assertEquals(10f, contaDaPessoa7.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
     }
 
     @Test
-    public void testarTranferenciaComNumeroNegativo(){
-        Agencia agencia = new Agencia();
+    public void testarTransferenciaSemFundosNaContaDeOrigem(){
 
-        Pessoa pessoa8 = new Pessoa("pessoa6", 88888888);
-        Pessoa pessoa9 = new Pessoa("pessoa7", 99999999);
+        Pessoa quartaPessoa = new Pessoa("quartaPessoa", 4444);
+        Pessoa quintaPessoa = new Pessoa("quintaPessoa", 5555);
+        Agencia quartaAgencia = new Agencia();
 
-        ContaCorrente contaDaPessoa8 = new ContaCorrente(888, pessoa8, agencia);
-        ContaCorrente contaDaPessoa9 = new ContaCorrente(999, pessoa9, agencia);
+        ContaCorrente quartaConta = new ContaCorrente(7777, quartaPessoa, quartaAgencia);
+        ContaCorrente quintaConta = new ContaCorrente(6666, quintaPessoa, quartaAgencia);
 
-        // sanity check: as contas já começam com saldo 10 (regra de negócio)
-        assertEquals(10f, contaDaPessoa8.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-        assertEquals(10f, contaDaPessoa9.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        //sanity check
+        assertEquals(10f, quartaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        assertEquals(10f,quintaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
-        contaDaPessoa8.transferir(-1, contaDaPessoa9);
+        quartaConta.transferir(22, quintaConta);
 
-        assertEquals(10f, contaDaPessoa8.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-        assertEquals(10f, contaDaPessoa9.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        assertEquals(10f, quartaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        assertEquals(10f, quintaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
-        contaDaPessoa9.transferir(-200, contaDaPessoa8);
-
-        assertEquals(10f, contaDaPessoa8.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
-        assertEquals(10f, contaDaPessoa9.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
     }
 
+    @Test
+    public void testarTransferenciaComFundosNaContaDeOrigem(){
 
+        Pessoa sextaPessoa = new Pessoa("quartaPessoa", 6666);
+        Pessoa setimaPessoa = new Pessoa("quintaPessoa", 7777);
+        Agencia quintaAgencia = new Agencia();
 
+        ContaCorrente sextaConta = new ContaCorrente(5555, sextaPessoa, quintaAgencia);
+        ContaCorrente setimaConta = new ContaCorrente(4444, setimaPessoa, quintaAgencia);
 
+        //sanity check
+        assertEquals(10f, sextaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        assertEquals(10f,setimaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
+        sextaConta.transferir(7, setimaConta);
 
+        assertEquals(3f, sextaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        assertEquals(17f, setimaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
+        sextaConta.transferir(2, setimaConta);
 
+        assertEquals(1f, sextaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        assertEquals(19f, setimaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+    }
 
+    @Test
+    public void testarTransferenciaNegativa(){
 
+        Pessoa oitavaPessoa = new Pessoa("oitavaPessoa", 8888);
+        Pessoa nonaPessoa = new Pessoa("nonaPessoa", 9999);
+        Agencia sextaAgencia = new Agencia();
 
+        ContaCorrente oitavaConta = new ContaCorrente(3333, oitavaPessoa, sextaAgencia);
+        ContaCorrente nonaConta = new ContaCorrente(2222, nonaPessoa, sextaAgencia);
 
+        //sanity check
+        assertEquals(10f, oitavaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        assertEquals(10f,nonaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
+        oitavaConta.transferir(-100, nonaConta);
 
+        assertEquals(10f, oitavaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        assertEquals(10f, nonaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
 
+        oitavaConta.transferir(-2, oitavaConta);
 
-
-
-
-
-
-
+        assertEquals(10f, oitavaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+        assertEquals(10f, nonaConta.getSaldoEmReais(), ERRO_ACEITAVEL_NOS_FLOATS);
+    }
 
 }

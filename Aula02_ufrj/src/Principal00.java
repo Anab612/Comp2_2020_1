@@ -3,75 +3,84 @@ import java.util.Scanner;
 public class Principal00{
 
     public static void imprimirArray(boolean[] numerosCompostos){
-        for(int i = 0; i < numerosCompostos.length; i++){
-            System.out.println(String.format("numerosCompostos[%d] = %s", i, numerosCompostos[i]));
+        for(int pos = 0; pos < (numerosCompostos.length); pos++){
+            System.out.printf("numerosCompostos[%d] = %s\n", pos, numerosCompostos[pos]);
         }
-        numerosCompostos[0] = false;
+        numerosCompostos[0] = false; // mudou o array por referencia
     }
 
-    public static void imprimirArrayInteiros(int[] primos){
+    public static void imprimirArrayDeInteiros(int [] primos){
         for(int i = 0; i < primos.length; i++){
-            System.out.println(String.format("primos[%d] = %d", i, primos[i]));
+            System.out.printf("primos[%d] = %d\n", i, primos[i]);
         }
+        System.out.println("\n\n");
     }
+
 
     /**
-     * Retorna a quantidade de números primos existentes no intervalo [1, limite]
-     * Internamente utiliza o crivo de Eratóstenes
-     * @param limite O maior número desejado, fechando o intervalo de busca
+     * retorna a quantodade de numeros primos
+     * no intervalo [1, limite]
+     * internamente utiliza o crivo de Eratóstenes
+     * @param limite o maior numero desejado, fechando o intervalo de busca
      * @return a quantidade de primos naquele intervalo
      */
-    public static int[] obterPrimosViaCrivo(int limite){  // TRUE -> COMPOSTO   // FALSE -> TRUE
-        boolean[] numerosCompostos;  // ponteiro nullo
+    public static int[] obterPrimosViaCrivo(int limite){
+        boolean [] numerosCompostos; // null
+        //tudo false a principio
+        // riscar é colocar true
+        //todos os primos serao false, os compostos serao true
+        //por nao ter inicializado, dá pra perceber que os primos serão 'false'
         numerosCompostos = new boolean[limite + 1];
-        numerosCompostos[0] = true;
-        numerosCompostos[1] = true;
+        numerosCompostos[0] = true; // 0 é composto
+        numerosCompostos[1] = true; // 1 é composto
 
+        //crivo
         int passo = 2;
         while(passo <= limite){
-            for(int numeroASerRiscado = passo*2; numeroASerRiscado <= limite; numeroASerRiscado += passo){ // laço para riscar multiplos
-                numerosCompostos[numeroASerRiscado] = true; // true -> compostos
+            for(int numeroASerRiscado = passo*2; numeroASerRiscado <= limite; numeroASerRiscado += passo){
+                numerosCompostos[numeroASerRiscado] = true; // os compostos sao true. Esse numero eh composto porque ele eh multiplo do passo
             }
-            // o próximo numero que ta como false vai ser o proximo passo
             int novoPasso = 0;
-            for(int i = passo + 1; i < numerosCompostos.length; i++){
+            for (int i = passo + 1; i < (limite + 1); i++){
                 if(!numerosCompostos[i]){
                     novoPasso = i;
                     break;
                 }
             }
             if(novoPasso == 0){
-                break;
+                break; // nao ha mais nada a ser feito
             }
             passo = novoPasso;
         }
-        // cota os primos que estão marcados com falso
         int contPrimos = 0;
+        //conta os primos que estão marcados com 'false'
         for (int i = 0; i <= limite; i++){
             if(!numerosCompostos[i]){
                 contPrimos++;
             }
         }
-        //imprimirArray(numerosCompostos);
-        //System.out.println("modificação ----> numerosCompostos[0]: " + numerosCompostos[0]);
-        int[] results = new int[contPrimos];
-        int ind = 0;
-        for(int numero = 2; numero < (limite + 1); numero++){
+//        imprimirArray(numerosCompostos);
+//        System.out.println(numerosCompostos[0]); // é true
+
+        int [] results = new int[contPrimos];
+        int i = 0;
+        for (int numero = 2; numero < (limite + 1) ; numero++){
             if(!numerosCompostos[numero]){
-                results[ind++] = numero;
+                results[i++] = numero;
             }
         }
+
         return results;
     }
 
     /**
-     * Retorna se o número dado é primo
-     * @param numero número desejado
-     * @return true se o número for primo, falso caso contrário
+     * retorna se op numero dado é primo
+     * @param numero o numero desejado
+     * @return true se for primo, false caso contrário
      */
     public static boolean ehPrimo(int numero){
         if(numero < 2){
-            return false;
+            return false; // composto é falso
         }
         if(numero == 2){
             return true;
@@ -79,86 +88,79 @@ public class Principal00{
         if(numero % 2 == 0){
             return false;
         }
-        int raiz = (int) Math.sqrt(numero);
-//        if(numero == 2){
-//            return true;
-//        }
+//            if(numero == 2){
+//                return true; // primo é true
+//            }
+        int raiz = (int)Math.sqrt(numero);
         for(int divisor = 3; divisor <= raiz; divisor += 2){
             if(numero % divisor == 0){
-                return false; // eh ***composto = FALSO***
+                return false; // composto é falso
             }
         }
-        return true;
+        return true; // primo é true
     }
 
     /**
-     * Retorna a quantidade de números primos existentes no intervalo [1, limite]
-     * Força bruta para cada numero do intervalo
-     * @param limite O maior número desejado, fechando o intervalo de busca
+     * retorna a quantidade de numeros primos
+     * no intervalo [1, limite]
+     * força bruta para cada numero do intervalo
+     * @param limite o maior numero desejado, fechando o intervalo de busca
      * @return a quantidade de primos naquele intervalo
      */
-    public static int[] obterPrimos(int limite){ // vetor inteiros com os primos
-        int[] primos = new int[limite];
+    public static int[] obterPrimos(int limite){
+        int [] primos = new int[limite]; // pre alocando o array com tamanho bem exagerada
         int cont = 0;
-        for (int x = 0; x <= limite; x++){
+        for(int x = 0; x <= limite; x++){
             if(ehPrimo(x)){
                 primos[cont++] = x;
             }
         }
-        int[] results = new int[cont];
-        for(int ind = 0; ind < cont; ind++){
-            results[ind] = primos[ind];
+        int [] results = new int[cont];
+
+        for (int i = 0; i < cont; i++){
+            results[i] = primos[i];
         }
+
         return results;
     }
 
-//    /**
-//     * Retorna todos os primos em um limite [1, limite] ordenados em ordem crescente
-//     * @param limite O número que fecha o limite desejado
-//     * @return Array de inteiros contendo os primos (o tamanho do array será exato)
-//     */
-
-    ///  PEQUENA (faz o que as grandes faziam antes)
-
+    /**
+     * retorna a quantidade de numeros primos
+     * no intervalo [1, limite]
+     * força bruta para cada numero do intervalo
+     * @param limite o maior numero desejado, fechando o intervalo de busca
+     * @return a quantidade de primos naquele intervalo
+     */
     public static int contarPrimos(int limite){
         int[] primos = obterPrimosViaCrivo(limite);
         return primos.length;
     }
 
     public static void main(String[] args){
+
         Scanner scanner = new Scanner(System.in);
-        while(true) {
-            System.out.print("Digite o número: ");
+        while(true){
+            System.out.print("Digite um número: ");
             int x = scanner.nextInt();
             if(x < 0){
                 return;
             }
-
             long inicio = System.currentTimeMillis();
             int[] primos = obterPrimos(x);
             long termino = System.currentTimeMillis();
-            float duracao = (termino - inicio)/1000f;
-            System.out.println("Crivo de Eratóstenes");
-            System.out.println(String.format("Quantidade de primos em [1, %d] = %d (duracao: %.3f segundos)", x, primos.length, duracao));
-            imprimirArrayInteiros(primos);
+            float duracao = (termino - inicio) / 1000f;
+            System.out.println("\n\nPor 'força bruta':");
+            System.out.println(String.format("Quantidade de primos em [1, %d] = %d (duração %.3f segundos)", x, primos.length, duracao));
+            imprimirArrayDeInteiros(primos);
 
-            System.out.printf("\n****************************\n");
-
-            System.out.println("Força bruta");
             inicio = System.currentTimeMillis();
             primos = obterPrimosViaCrivo(x);
             termino = System.currentTimeMillis();
-            duracao = (termino - inicio)/1000f;
-            System.out.println(String.format("Quantidade de primos em [1, %d] = %d (duracao: %.3f segundos)", x, primos.length, duracao));
-            imprimirArrayInteiros(primos);
-
-
-
-
+            duracao = (termino - inicio) / 1000f;
+            System.out.println("Por crivo de Eratóstenes: ");
+            System.out.println(String.format("Quantidade de primos em [1, %d] = %d (duração %.3f segundos)", x, primos.length, duracao));
+            imprimirArrayDeInteiros(primos);
         }
+
     }
 }
-
-
-
-

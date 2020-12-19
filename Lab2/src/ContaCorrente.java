@@ -3,92 +3,89 @@ import java.util.Date;
 
 public class ContaCorrente {
 
-    private long numeroDaConta;
-
-    private Agencia agencia;
-
+    private final long numeroDaConta;
+    private final Agencia agencia;
     private float saldoEmReais;
-
     private Date dataDeCriacao;
-
     private Pessoa correntista;
-
-    private ArrayList<String> historicoDeOperacoes = new ArrayList<String>();
+    private Pessoa gerenteDaConta;
+    private ArrayList<String> historicoDeOperacao;
 
     /**
-     * Método que retorna o saldo da conta corrente
-     * @return saldo da conta corrente
+     * método construtor da classe ContaCorrente
+     * @param numeroDaConta o número identificador da conta corrente
+     * @param correntista é um objeto da classe Pessoa
+     * @param agencia é um objeto da classe Agencia
+     */
+    public ContaCorrente(long numeroDaConta, Pessoa correntista, Agencia agencia){
+        this.numeroDaConta = numeroDaConta;
+        this.correntista = correntista;
+        this.agencia = agencia;
+        this.historicoDeOperacao = new ArrayList<>();
+        this.dataDeCriacao = new Date();
+        this.saldoEmReais = 10;
+
+    }
+
+    /**
+     * Método getter
+     * @return o saldo da conta corrente
      */
     public float getSaldoEmReais(){
         return saldoEmReais;
     }
 
     /**
-     * Método construtor da classe ContaCorrente
-     * @param numeroDaConta número identificador da conta
-     * @param correntista titular da conta
-     * @param agencia agência à qual pertence a conta
-     */
-    public ContaCorrente(long numeroDaConta, Pessoa correntista, Agencia agencia){
-        this.numeroDaConta = numeroDaConta;
-        this.correntista = correntista;
-        this.agencia = agencia;
-        this.historicoDeOperacoes = new ArrayList<>();
-        this.dataDeCriacao = new Date();
-        this.saldoEmReais = 10;
-    }
-
-    /**
-     * Método que retorna o histórico de operações da conta corrente
+     * Método getter
      * @return o histórico de operações da conta corrente
      */
-    public ArrayList<String> getHistoricoDeOperacoes(){
-        return this.historicoDeOperacoes;
+    public ArrayList<String> getHistoricoDeOperacao(){
+        return historicoDeOperacao;
     }
 
     /**
-     * Deposita o valor passado como parâmetro no saldo da conta,
-     * caso esse valor seja positivo.
-     * Caso contrário, nada é feito.
-     * @param deposito Valor que se deseja depositar.
+     * Método que dado um valor float de depósito, verifica se o valor é positivo.
+     * Se o valor for positivo, ele é somado ao atributo saldoEmReais.
+     * @param valor o valor a ser depositado.
      */
-    public void depositar(float deposito){
-        if(deposito <= 0){
-            return; // toDO lançar exceção!!!
+    public void depositar(float valor){
+        if(valor <= 0){
+            return;
         }
-
-        this.saldoEmReais += deposito;
-        this.historicoDeOperacoes.add(String.format("Deposito em dinheiro de %.2f na data %s", deposito, new Date()));
-
+        this.saldoEmReais += valor;
+        historicoDeOperacao.add("Deposito em dinheiro: " + valor + " na data " + new Date());
     }
 
     /**
-     * Saca o valor passado como parâmetro do saldo da conta,
-     * caso esse valor seja positivo e menor ou igual ao saldo.
-     * Caso contrário, nada é feito.
-     * @param saque Valor que se deseja sacar.
+     * Dado um valor de saque, verifica se há fundo suficiente na conta para efetuar o saque.
+     * Se houver, o valor do saque é subtraído do atributo saldoEmReais da conta corrente.
+     * @param saque o valor a ser sacado.
      */
     public void sacar(float saque){
-        if (saque <= 0 || saque > this.saldoEmReais){
+        if(saque <= 0){
             return;
         }
-
-        this.saldoEmReais -= saque;
-        this.historicoDeOperacoes.add(String.format("Saque em dinheiro de %.2f na data %s", saque, new Date()));
+        if(saque <= saldoEmReais){
+            saldoEmReais -= saque;
+            historicoDeOperacao.add("Saque em dinheiro: " + saque + " na data " + new Date());
+        }
     }
 
     /**
-     * Tranfere valor passado como parâmetro de uma conta para a outra,
-     * caso o valor seja positivo e menor ou igual ao saldo da conta de destino.
-     * Caso contário, nada é feito.
-     * @param tranferencia Valor que se deseja transferir
-     * @param contaDeDestino Conta para a qual se deseja tranferir o valor.
+     * Dado um valor de transferência e uma conta destino, o método verifica se o valor
+     * da transferência é maior do que o fundo da conta de origem ou se é menor ou igual a zero;
+     * nesses casos o método retorna sem efetuar a transferencia.
+     * Caso contrário, o método transfere o valor para a conta de destino.
+     * O valor de transferência é subtraído do atributo saldoEmReais da conta de origem.
+     * @param transferencia o valor a ser transferido.
+     * @param conta a conta destino, aquela que receberá o valor da transferência.
      */
-    public void transferir(float tranferencia, ContaCorrente contaDeDestino){
-        if (tranferencia > this.saldoEmReais || tranferencia <= 0){
+    public void transferir(float transferencia, ContaCorrente conta){
+        if(transferencia > this.getSaldoEmReais() || transferencia <= 0){
             return;
         }
-        this.saldoEmReais -= tranferencia;
-        contaDeDestino.depositar(tranferencia);
+        this.saldoEmReais -= transferencia;
+        conta.saldoEmReais += transferencia;
     }
+
 }

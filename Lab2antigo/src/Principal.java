@@ -1,12 +1,17 @@
+import java.util.ArrayList;
+
 public class Principal {
 
     public static void main(String[] args) {
 
-        Agencia agencia = new Agencia();
-        Pessoa maria = new Pessoa("maria", 568923);
-        maria.setEndereco("Rua R, número 50");
-        System.out.println(maria.getEndereco());
-        ContaCorrente minhaConta = new ContaCorrente(568923, maria, agencia);
+        ContaCorrente minhaConta = new ContaCorrente();
+        //minhaConta.historicoDeOperacao = new ArrayList<>();
+
+        //System.out.println(minhaConta.saldoEmReais);
+        //minhaConta.saldoEmReais = 1000000;
+        //System.out.println(minhaConta.saldoEmReais);
+        //minhaConta.historicoDeOperacao.add("Depósito em espécie de 1000000");
+        //System.out.println(minhaConta.historicoDeOperacao);
 
         System.out.println(minhaConta.getSaldoEmReais());
 
@@ -22,6 +27,7 @@ public class Principal {
         System.out.println(minhaConta.getSaldoEmReais());
         System.out.println(minhaConta.getHistoricoDeOperacao());
 
-        System.out.println(maria);
+        Pessoa fulano = new Pessoa("fulano", 1234);
+        System.out.println(fulano);
     }
 }

@@ -3,11 +3,8 @@ import java.util.Date;
 public class Pessoa {
 
     private String nome;
-
     private final long cpf;
-
     private Date dataDeNascimento;
-
     private String endereco;
 
     public Pessoa(String nome, long cpf){
@@ -17,7 +14,7 @@ public class Pessoa {
     }
 
     public void setEndereco(String endereco){
-        if (endereco.length() > 40){
+        if(endereco.length() > 40){
             return;
         }
         this.endereco = endereco;
@@ -30,4 +27,5 @@ public class Pessoa {
     public long getCpf(){
         return this.cpf;
     }
+
 }

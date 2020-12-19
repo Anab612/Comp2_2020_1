@@ -3,48 +3,50 @@ import java.util.Locale;
 
 public class Principal {
 
-
-    /**
-     * Retorna a média de n notas, dadas a soma e a quantidade de notas
-     * @param somaDasNotas é a soma de n notas
-     * @param quantidadeDeNotas é a quantidade de notas
-     * @return a média das notas
-     */
-    public static float calcularMedia(float somaDasNotas, int quantidadeDeNotas){
-        if (quantidadeDeNotas == 0) return 0;
-        else return somaDasNotas/quantidadeDeNotas;
-
-    }
-
-
     public static void main(String[] args){
+
         Scanner scanner = new Scanner(System.in);
+        long dreComMaiorMedia = 0;
+        float somaDasMedias = 0;
+        float maiorMedia = 0;
+        int quantidadeDeAlunos = 0;
 
-        System.out.print("Digite o dre e a nota do aluno: ");
+        System.out.println("Digite o DRE e a média do aluno");
         long dre = scanner.nextLong();
-        float nota = scanner.useLocale(Locale.ENGLISH).nextFloat();
-        int quantidadeDeNotas = 0;
-        float somaDasNotas = 0, maiorNota = 0;
-        long dreMaiorNota = 0;
+        float media = scanner.useLocale(Locale.ENGLISH).nextFloat();
 
-        while(nota >= 0){
-            quantidadeDeNotas++;
-            somaDasNotas += nota;
-            if (nota > maiorNota){
-                dreMaiorNota = dre;
-                maiorNota = nota;
+        while(media > 0){
+
+            quantidadeDeAlunos += 1;
+            somaDasMedias += media;
+
+            if(media > maiorMedia){
+                maiorMedia = media;
+                dreComMaiorMedia = dre;
             }
-            System.out.print("Digite o DRE e a nota do aluno: ");
+
+            System.out.println("Digite o DRE e a média do aluno:");
             dre = scanner.nextLong();
-            nota = scanner.useLocale(Locale.ENGLISH).nextFloat();
+            media = scanner.useLocale(Locale.ENGLISH).nextFloat();
+
         }
 
-        float mediaDaTurma = calcularMedia(somaDasNotas, quantidadeDeNotas);
+        if (quantidadeDeAlunos != 0){
+            System.out.printf("%d notas digitadas\n", quantidadeDeAlunos);
+            System.out.printf("Média da turma: %.1f\n", calcularMediaTurma(quantidadeDeAlunos, somaDasMedias));
+            System.out.printf("DRE com maior média: %d\n", dreComMaiorMedia);
+        }
 
-        System.out.printf("\n%d notas digitadas\n", quantidadeDeNotas);
-        System.out.printf("Média da turma: %.1f\n", mediaDaTurma);
-        System.out.printf("DRE com maior média: %d", dreMaiorNota);
     }
 
+    /***
+     * retorna a média da turma
+     * @param quantidadeDeAlunos a quantidade de alunos
+     * @param somaDasMedias a soma das médias dos alunos
+     * @return
+     */
+    public static float calcularMediaTurma(int quantidadeDeAlunos, float somaDasMedias){
+        return somaDasMedias/quantidadeDeAlunos;
+    }
 
 }
