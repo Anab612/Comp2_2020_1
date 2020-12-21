@@ -1,7 +1,14 @@
 public class Agencia {
 
-    String nome;
-    String endereco;
-    Pessoa gerenteGeral;
+    private String nome;
 
+    private String endereco;
+
+    private Pessoa gerenteGeral;
+
+    private int codigo;
+
+    public Agencia(){
+        super();
+    }
 }
